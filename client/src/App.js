@@ -1,6 +1,6 @@
 import './App.css';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -25,6 +25,27 @@ function App() {
     setDisplay('');
     setValue('');
   }
+
+  // this useEffect is partially written by copilot
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const { key } = event;
+      if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '(', ')', '.'].includes(key)) {
+        handleButtonClick(key);
+      } else if (key === 'Enter') {
+        event.preventDefault();
+        handleSubmit();
+      } else if (key === 'Escape') {
+        handleClear();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [value]);
 
   return (
     <div>
