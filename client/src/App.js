@@ -28,8 +28,8 @@ function App() {
 
   return (
     <div>
-      <div>
-        {display}
+      <div className="rounded-box">
+        <p className="display">{display}</p>
       </div>
       <div className="grid-container">
         <button onClick={() => handleButtonClick('(')} className="grid-button">(</button>
