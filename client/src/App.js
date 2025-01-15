@@ -9,8 +9,22 @@ function App() {
 
   const handleButtonClick = (val) => {
     setValue(value + val);
-    setDisplay(value + val)
-  }
+    if (val === '/'){
+      setDisplay(display + '÷');
+    }
+    else if (val === '*'){
+      setDisplay(display + '×');
+    }
+    else if (val === '-'){
+      setDisplay(display + '−');
+    }
+    else if (val === '/100'){
+      setDisplay(display + '%');
+    }
+    else{
+      setDisplay(display + val);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
