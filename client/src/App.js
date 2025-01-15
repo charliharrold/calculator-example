@@ -1,46 +1,50 @@
-import './App.css';
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [value, setValue] = useState('');
-  const [display, setDisplay] = useState('');
-
-  const handleButtonClick = (val) => {
-    setValue(value + val);
-    if (val === '/'){
-      setDisplay(display + '÷');
-    }
-    else if (val === '*'){
-      setDisplay(display + '×');
-    }
-    else if (val === '-'){
-      setDisplay(display + '−');
-    }
-    else if (val === '/100'){
-      setDisplay(display + '%');
-    }
-    else{
-      setDisplay(display + val);
-    }
-  };
+  const [calculation, setCalculation] = useState(''); // what's sent to the python backend
+  const [mainDisplay, setMainDisplay] = useState(''); // what's displayed on the calculator
+  const [upperDisplay, setUpperDisplay] = useState(''); 
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('/api/math', { input: value });
-      setDisplay(response.data);
+      const response = await axios.post('/api/math', { input: calculation });
+      setUpperDisplay(mainDisplay);
+      setMainDisplay(response.data);
+      setCalculation(response.data)
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  const handleClear = () => {
-    setDisplay('');
-    setValue('');
-  }
+  const handleButtonClick = (value) => {
+    setCalculation(calculation + value);
+    if (value === '/'){
+      setMainDisplay(mainDisplay + '÷');
+    }
+    else if (value === '*'){
+      setMainDisplay(mainDisplay + '×');
+    }
+    else if (value === '-'){
+      setMainDisplay(mainDisplay + '−');
+    }
+    else if (value === '/100'){
+      setMainDisplay(mainDisplay + '%');
+    }
+    else{
+      setMainDisplay(mainDisplay + value);
+    }
+  };
 
-  // this useEffect is partially written by copilot
+  const handleClear = () => {
+    setUpperDisplay(mainDisplay);
+    setCalculation('');
+    setMainDisplay('');
+  };
+
+  // this useEffect was partially written by copilot
   useEffect(() => {
     const handleKeyPress = (event) => {
       const { key } = event;
@@ -59,12 +63,13 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [value]);
+  });
 
   return (
     <div>
       <div className="rounded-box">
-        <p className="display">{display}</p>
+        <p className="upper-display">{upperDisplay}</p>
+        <p className="main-display">{mainDisplay}</p>
       </div>
       <div className="grid-container">
         <button onClick={() => handleButtonClick('(')} className="grid-button">(</button>
